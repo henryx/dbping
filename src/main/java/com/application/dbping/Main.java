@@ -10,6 +10,9 @@ import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 public class Main {
 
     private ArgumentParser initargs() {
@@ -32,8 +35,19 @@ public class Main {
 
     private void go(String[] args) {
         Namespace arguments;
+        String dburi;
+        URI uri;
 
         arguments = this.initargs().parseArgsOrFail(args);
+
+        dburi = arguments.getString("database");
+
+        try {
+            uri = new URI(dburi);
+        } catch (URISyntaxException e) {
+            System.err.println("Malformed URI");
+            System.exit(1);
+        }
     }
 
     public static void main(String[] args) {
