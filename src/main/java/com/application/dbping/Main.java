@@ -44,8 +44,17 @@ public class Main {
 
         try {
             uri = new URI(dburi);
+
+            if (uri.getScheme().equals("mysql")) {
+                //TODO: implement MySQL ping
+            } else {
+                throw new UnsupportedOperationException("Scheme not supported");
+            }
         } catch (URISyntaxException e) {
             System.err.println("Malformed URI");
+            System.exit(1);
+        } catch (UnsupportedOperationException e) {
+            System.err.println(e.getMessage());
             System.exit(1);
         }
     }
