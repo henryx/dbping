@@ -28,7 +28,8 @@ public class MySQL extends Database {
                 this.uri.getHost() +
                 ":" +
                 this.uri.getPort() +
-                "/mysql";
+                this.uri.getPath() +
+                "?useLegacyDatetimeCode=false&serverTimezone=UTC";
 
         return result;
     }
