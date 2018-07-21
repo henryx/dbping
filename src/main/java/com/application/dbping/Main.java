@@ -6,6 +6,8 @@
  */
 package com.application.dbping;
 
+import com.application.dbping.database.Database;
+import com.application.dbping.database.MySQL;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.SQLException;
 
 public class Main {
 
@@ -76,6 +79,7 @@ public class Main {
     }
 
     private void go(String[] args) {
+        Database db;
         Namespace arguments;
         String dburi;
         String[] auth;
@@ -90,15 +94,20 @@ public class Main {
             auth = getauth(uri.getUserInfo());
 
             if (uri.getScheme().equals("mysql")) {
-                //TODO: implement MySQL ping
+                db = new MySQL(uri, auth[0], auth[1]);
             } else {
                 throw new UnsupportedOperationException("Scheme not supported");
             }
+
+            db.close();
         } catch (URISyntaxException e) {
             System.err.println("Malformed URI");
             System.exit(1);
         } catch (UnsupportedOperationException e) {
             System.err.println(e.getMessage());
+            System.exit(1);
+        } catch (SQLException e) {
+            System.err.println("Failed to connect to database: " + e.getMessage());
             System.exit(1);
         } catch (IOException e) {
         }
