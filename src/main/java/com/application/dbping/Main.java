@@ -8,6 +8,7 @@ package com.application.dbping;
 
 import com.application.dbping.database.Database;
 import com.application.dbping.database.MySQL;
+import com.application.dbping.database.Oracle;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -90,6 +91,7 @@ public class Main {
         Database db;
         Namespace arguments;
         String dburi;
+        String scheme;
         String[] auth;
         URI uri;
         int iterations;
@@ -108,8 +110,12 @@ public class Main {
             uri = new URI(dburi);
             auth = getauth(uri.getUserInfo());
 
-            if (uri.getScheme().equals("mysql")) {
+            scheme = uri.getScheme();
+
+            if (scheme.equals("mysql")) {
                 db = new MySQL(uri, auth[0], auth[1]);
+            } else if (scheme.equals("oracle")) {
+                db = new Oracle(uri, auth[0], auth[1]);
             } else {
                 throw new UnsupportedOperationException("Scheme not supported");
             }
