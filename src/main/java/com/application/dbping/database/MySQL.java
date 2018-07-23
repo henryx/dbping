@@ -9,6 +9,7 @@ package com.application.dbping.database;
 import java.net.URI;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public class MySQL extends Database {
     private String url;
@@ -39,12 +40,7 @@ public class MySQL extends Database {
     }
 
     @Override
-    public void ping(int count) {
-
-    }
-
-    @Override
-    public void ping() {
-
+    public Timestamp ping() throws SQLException {
+        return null;
     }
 }
