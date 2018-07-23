@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 
@@ -56,7 +57,7 @@ public class Main {
 
             result[0] = data[0];
             if (data.length > 1) {
-                result[1] =data[1];
+                result[1] = data[1];
             }
         }
 
@@ -69,7 +70,7 @@ public class Main {
             System.out.print("Enter password: ");
             try {
                 result[1] = String.valueOf(console.readPassword());
-            }catch (NullPointerException e) {
+            } catch (NullPointerException e) {
                 // Fallback to clear input, if console does not work
                 result[1] = br.readLine();
             }
@@ -84,6 +85,8 @@ public class Main {
         String dburi;
         String[] auth;
         URI uri;
+        int iterations;
+        int counted;
 
         arguments = this.initargs().parseArgsOrFail(args);
 
@@ -99,6 +102,28 @@ public class Main {
                 throw new UnsupportedOperationException("Scheme not supported");
             }
 
+            iterations = arguments.getInt("c");
+            counted = 0;
+            while (true) {
+                try {
+                    if (iterations > 0 && counted == iterations) {
+                        break;
+                    } else {
+                        counted++;
+                    }
+                    System.out.print("Executed query " + counted + ": ");
+
+                    db.ping();
+                    System.out.println("... Ok!");
+                } catch (SQLException e) {
+                    System.out.println("Cannot retrieve data from database: " + e.getMessage());
+                }
+
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                }
+            }
             db.close();
         } catch (URISyntaxException e) {
             System.err.println("Malformed URI");
