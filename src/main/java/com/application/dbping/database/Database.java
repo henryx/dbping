@@ -9,6 +9,7 @@ package com.application.dbping.database;
 import java.net.URI;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public abstract class Database {
     protected URI uri;
@@ -17,8 +18,7 @@ public abstract class Database {
     public Database(URI uri) {
         this.uri = uri;
     }
-    public abstract void ping(int count);
-    public abstract void ping();
+    public abstract Timestamp ping() throws SQLException;
 
     public void close() {
         try {
