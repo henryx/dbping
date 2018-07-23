@@ -8,6 +8,7 @@ package com.application.dbping.database;
 
 import java.net.URI;
 import java.sql.*;
+import java.util.Calendar;
 
 public class MySQL extends Database {
     private String url;
@@ -38,12 +39,15 @@ public class MySQL extends Database {
     }
 
     @Override
-    public Timestamp ping() throws SQLException {
+    public Calendar ping() throws SQLException {
+        Calendar result;
         Statement stmt;
         ResultSet res;
         Timestamp date;
 
+        result = Calendar.getInstance();
         stmt = this.conn.createStatement();
+
         res = stmt.executeQuery("SELECT now()");
         res.next();
         date = res.getTimestamp(1);
@@ -51,6 +55,8 @@ public class MySQL extends Database {
         res.close();
         stmt.close();
 
-        return date;
+        result.setTimeInMillis(date.getTime());
+
+        return result;
     }
 }

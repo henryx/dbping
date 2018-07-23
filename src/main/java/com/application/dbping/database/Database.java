@@ -9,7 +9,7 @@ package com.application.dbping.database;
 import java.net.URI;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.util.Calendar;
 
 public abstract class Database {
     protected URI uri;
@@ -18,11 +18,13 @@ public abstract class Database {
     public Database(URI uri) {
         this.uri = uri;
     }
-    public abstract Timestamp ping() throws SQLException;
+
+    public abstract Calendar ping() throws SQLException;
 
     public void close() {
         try {
             this.conn.close();
-        } catch (SQLException e) {}
+        } catch (SQLException e) {
+        }
     }
 }
