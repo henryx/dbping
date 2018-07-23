@@ -7,9 +7,7 @@
 package com.application.dbping.database;
 
 import java.net.URI;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 
 public class MySQL extends Database {
     private String url;
@@ -41,6 +39,18 @@ public class MySQL extends Database {
 
     @Override
     public Timestamp ping() throws SQLException {
-        return null;
+        Statement stmt;
+        ResultSet res;
+        Timestamp date;
+
+        stmt = this.conn.createStatement();
+        res = stmt.executeQuery("SELECT now()");
+        res.next();
+        date = res.getTimestamp(1);
+
+        res.close();
+        stmt.close();
+
+        return date;
     }
 }
