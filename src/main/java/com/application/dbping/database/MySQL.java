@@ -7,7 +7,6 @@
 package com.application.dbping.database;
 
 import java.net.URI;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -36,10 +35,6 @@ public class MySQL extends Database {
                 "?useLegacyDatetimeCode=false&serverTimezone=UTC";
 
         return result;
-    }
-
-    private void connect(String user, String password) throws SQLException {
-        this.conn = DriverManager.getConnection(url, user, password);
     }
 
     @Override

@@ -8,6 +8,7 @@ package com.application.dbping.database;
 
 import java.net.URI;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public abstract class Database {
@@ -17,6 +18,10 @@ public abstract class Database {
 
     public Database(URI uri) {
         this.uri = uri;
+    }
+
+    protected void connect(String user, String password) throws SQLException {
+        this.conn = DriverManager.getConnection(this.url, user, password);
     }
 
     public abstract void ping() throws SQLException;

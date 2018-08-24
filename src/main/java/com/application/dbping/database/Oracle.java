@@ -7,7 +7,6 @@
 package com.application.dbping.database;
 
 import java.net.URI;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -34,10 +33,6 @@ public class Oracle extends Database {
                 + this.uri.getPath().substring(1);
 
         return result;
-    }
-
-    private void connect(String user, String password) throws SQLException {
-        this.conn = DriverManager.getConnection(url, user, password);
     }
 
     @Override
