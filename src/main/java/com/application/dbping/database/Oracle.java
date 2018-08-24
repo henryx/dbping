@@ -8,13 +8,13 @@ package com.application.dbping.database;
 
 import java.net.URI;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Oracle extends Database {
     public Oracle(URI uri, String user, String password) throws SQLException {
         super(uri);
 
         this.url = generate();
+        this.query = "SELECT SYSDATE FROM dual";
 
         this.connect(user, password);
     }
@@ -33,15 +33,5 @@ public class Oracle extends Database {
                 + this.uri.getPath().substring(1);
 
         return result;
-    }
-
-    @Override
-    public void ping() throws SQLException {
-        Statement stmt;
-
-        stmt = this.conn.createStatement();
-
-        stmt.executeQuery("SELECT SYSDATE FROM dual");
-        stmt.close();
     }
 }

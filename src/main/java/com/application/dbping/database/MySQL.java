@@ -8,13 +8,13 @@ package com.application.dbping.database;
 
 import java.net.URI;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class MySQL extends Database {
     public MySQL(URI uri, String user, String password) throws SQLException {
         super(uri);
 
         this.url = generate();
+        this.query = "SELECT now()";
 
         this.connect(user, password);
     }
@@ -35,15 +35,5 @@ public class MySQL extends Database {
                 "?useLegacyDatetimeCode=false&serverTimezone=UTC";
 
         return result;
-    }
-
-    @Override
-    public void ping() throws SQLException {
-        Statement stmt;
-
-        stmt = this.conn.createStatement();
-
-        stmt.executeQuery("SELECT now()");
-        stmt.close();
     }
 }
