@@ -9,6 +9,7 @@ package com.application.dbping;
 import com.application.dbping.database.Database;
 import com.application.dbping.database.MySQL;
 import com.application.dbping.database.Oracle;
+import com.application.dbping.database.PostgreSQL;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -116,7 +117,9 @@ public class Main {
                 db = new MySQL(uri, auth[0], auth[1]);
             } else if (scheme.equals("oracle")) {
                 db = new Oracle(uri, auth[0], auth[1]);
-            } else {
+            } else if (scheme.equals("postgresql")) {
+                db = new PostgreSQL(uri, auth[0], auth[1]);
+            }else {
                 throw new UnsupportedOperationException("Scheme not supported");
             }
 
