@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Oracle extends Database {
+
     private String url;
 
     public Oracle(URI uri, String user, String password) throws SQLException {
@@ -23,12 +24,17 @@ public class Oracle extends Database {
     }
 
     private String generate() {
-        String result = "jdbc:oracle:thin:@" +
-                this.uri.getHost() +
-                ":" +
-                this.uri.getPort() +
-                ":" +
-                this.uri.getPath().substring(1);
+        String result;
+        int port;
+
+        port = this.uri.getPort() == -1 ? 1521 : this.uri.getPort();
+
+        result = "jdbc:oracle:thin:@"
+                + this.uri.getHost()
+                + ":"
+                + port
+                + ":"
+                + this.uri.getPath().substring(1);
 
         return result;
     }

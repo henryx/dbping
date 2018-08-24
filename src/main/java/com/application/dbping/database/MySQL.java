@@ -23,12 +23,17 @@ public class MySQL extends Database {
     }
 
     private String generate() {
-        String result = "jdbc:" +
+        String result;
+        int port;
+
+        port = this.uri.getPort() == -1 ? 3306 : this.uri.getPort();
+
+        result = "jdbc:" +
                 this.uri.getScheme() +
                 "://" +
                 this.uri.getHost() +
                 ":" +
-                this.uri.getPort() +
+                port +
                 this.uri.getPath() +
                 "?useLegacyDatetimeCode=false&serverTimezone=UTC";
 
