@@ -88,15 +88,58 @@ public class Main {
         return result;
     }
 
+    private Database getDb(URI uri, String[] auth) throws SQLException {
+        Database result;
+        String scheme;
+
+        scheme = uri.getScheme();
+
+        if (scheme.equals("mysql")) {
+            result = new MySQL(uri, auth[0], auth[1]);
+        } else if (scheme.equals("oracle")) {
+            result = new Oracle(uri, auth[0], auth[1]);
+        } else if (scheme.equals("postgresql")) {
+            result = new PostgreSQL(uri, auth[0], auth[1]);
+        } else {
+            throw new UnsupportedOperationException("Scheme not supported");
+        }
+
+        return result;
+    }
+
+    private void ping(int iterations, Database db) {
+        int counted;
+
+        counted = 0;
+        while (true) {
+            try {
+                if (iterations > 0 && counted == iterations) {
+                    break;
+                } else {
+                    counted++;
+                }
+                System.out.print("Executed query " + counted + ": ");
+
+                db.ping();
+                System.out.println("... Ok!");
+            } catch (SQLException e) {
+                System.out.println("Cannot retrieve data from database: " + e.getMessage());
+            }
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException ignored) {
+            }
+        }
+    }
+
     private void go(String[] args) {
         Database db;
         Namespace arguments;
         String dburi;
-        String scheme;
         String[] auth;
         URI uri;
         int iterations;
-        int counted;
 
         arguments = this.initargs().parseArgsOrFail(args);
 
@@ -110,41 +153,11 @@ public class Main {
         try {
             uri = new URI(dburi);
             auth = getauth(uri.getUserInfo());
-
-            scheme = uri.getScheme();
-
-            if (scheme.equals("mysql")) {
-                db = new MySQL(uri, auth[0], auth[1]);
-            } else if (scheme.equals("oracle")) {
-                db = new Oracle(uri, auth[0], auth[1]);
-            } else if (scheme.equals("postgresql")) {
-                db = new PostgreSQL(uri, auth[0], auth[1]);
-            }else {
-                throw new UnsupportedOperationException("Scheme not supported");
-            }
+            db = this.getDb(uri, auth);
 
             iterations = arguments.getInt("c");
-            counted = 0;
-            while (true) {
-                try {
-                    if (iterations > 0 && counted == iterations) {
-                        break;
-                    } else {
-                        counted++;
-                    }
-                    System.out.print("Executed query " + counted + ": ");
+            this.ping(iterations, db);
 
-                    db.ping();
-                    System.out.println("... Ok!");
-                } catch (SQLException e) {
-                    System.out.println("Cannot retrieve data from database: " + e.getMessage());
-                }
-
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                }
-            }
             db.close();
         } catch (URISyntaxException e) {
             System.err.println("Malformed URI");
@@ -155,7 +168,7 @@ public class Main {
         } catch (SQLException e) {
             System.err.println("Failed to connect to database: " + e.getMessage());
             System.exit(1);
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
     }
 
