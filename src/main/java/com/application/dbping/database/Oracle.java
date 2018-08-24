@@ -12,9 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Oracle extends Database {
-
-    private String url;
-
     public Oracle(URI uri, String user, String password) throws SQLException {
         super(uri);
 

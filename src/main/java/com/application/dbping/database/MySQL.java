@@ -12,8 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class MySQL extends Database {
-    private String url;
-
     public MySQL(URI uri, String user, String password) throws SQLException {
         super(uri);
 

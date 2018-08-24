@@ -11,8 +11,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public abstract class Database {
-    protected URI uri;
     protected Connection conn;
+    protected URI uri;
+    protected String url;
 
     public Database(URI uri) {
         this.uri = uri;
